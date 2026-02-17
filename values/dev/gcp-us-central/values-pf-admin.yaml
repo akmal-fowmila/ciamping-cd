@@ -1,35 +1,17 @@
 pingfederate-admin:
-  enabled: true
-
   replicaCount: 1
-
   image:
     repository: pingidentity/pingfederate
-    tag: "12.0.0"
+    tag: latest
     pullPolicy: IfNotPresent
-
   resources:
     requests:
-      cpu: "1"
-      memory: "4Gi"
+      cpu: "500m"
+      memory: "1Gi"
     limits:
-      cpu: "3"
-      memory: "6Gi"
-
-  service:
-    type: ClusterIP
-    port: 9999
-
-  persistence:
-    enabled: true
-    size: 40Gi
-
+      cpu: "1"
+      memory: "2Gi"
   env:
-env:
-  SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
-  SERVER_PROFILE_PATH: "pingfederate"
-  OPERATIONAL_MODE: "CLUSTERED"
-
-  autoscaling:
-    enabled: false
-
+    SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
+    SERVER_PROFILE_PATH: "pingfederate"
+    OPERATIONAL_MODE: "CLUSTERED"
