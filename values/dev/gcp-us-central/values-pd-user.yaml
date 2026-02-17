@@ -1,0 +1,29 @@
+pingdirectory-user:
+  enabled: true
+
+  replicaCount: 2
+
+  image:
+    repository: pingidentity/pingdirectory
+    tag: "9.0.0"
+    pullPolicy: IfNotPresent
+
+  resources:
+    requests:
+      cpu: "1"
+      memory: "6Gi"
+    limits:
+      cpu: "4"
+      memory: "12Gi"
+
+  service:
+    type: ClusterIP
+    port: 1389
+
+  persistence:
+    enabled: true
+    size: 80Gi
+
+  env:
+    SERVER_PROFILE_PATH: "server-profile"
+    OPERATIONAL_MODE: "CLUSTERED"
