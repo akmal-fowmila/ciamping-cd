@@ -21,11 +21,14 @@ pingfederate-engine:
     port: 9031
 
   env:
-    SERVER_PROFILE_PATH: "server-profile"
-    OPERATIONAL_MODE: "CLUSTERED_ENGINE"
+env:
+  SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
+  SERVER_PROFILE_PATH: "pingfederate"
+  OPERATIONAL_MODE: "CLUSTERED"
 
   autoscaling:
     enabled: true
     minReplicas: 2
     maxReplicas: 5
     targetCPUUtilizationPercentage: 70
+
