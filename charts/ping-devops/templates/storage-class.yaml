@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: pingdirectory-ssd
+provisioner: pd.csi.storage.gke.io
+parameters:
+  type: pd-ssd # Or premium-rwo for newer CSI drivers
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
