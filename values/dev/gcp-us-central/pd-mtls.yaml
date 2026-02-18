@@ -1,0 +1,8 @@
+apiVersion: "security.istio.io/v1beta1"
+kind: "PeerAuthentication"
+metadata:
+  name: "ping-mtls-strict"
+  namespace: "pd-dev-ns"
+spec:
+  mtls:
+    mode: STRICT  # Rejects all unencrypted traffic
