@@ -1,0 +1,5 @@
+kind: ServiceExport
+apiVersion: net.gke.io/v1
+metadata:
+  name: pingdirectory-cluster-uscentral # Must match the clusterServiceName in Helm values [cite: 338]
+  namespace: pd-dev-ns                 # The PingDirectory namespace [cite: 344]

@@ -1,5 +1,0 @@
-kind: ServiceExport
-apiVersion: net.gke.io/v1
-metadata:
-  name: pingdirectory-cluster-uscentral
-  namespace: pd-dev-ns
