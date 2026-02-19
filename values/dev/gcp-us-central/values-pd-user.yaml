@@ -1,31 +1,110 @@
-pingdirectory-user:
-  enabled: true
+# pingdirectory-user:
+#   enabled: true
 
-  replicaCount: 2
+#   replicaCount: 2
 
-  image:
-    repository: pingidentity/pingdirectory
-    tag: "10.0.0"
-    pullPolicy: IfNotPresent
+#   image:
+#     repository: pingidentity/pingdirectory
+#     tag: "10.0.0"
+#     pullPolicy: IfNotPresent
 
-  resources:
-    requests:
-      cpu: "1"
-      memory: "6Gi"
-    limits:
-      cpu: "4"
-      memory: "12Gi"
+#   resources:
+#     requests:
+#       cpu: "1"
+#       memory: "6Gi"
+#     limits:
+#       cpu: "4"
+#       memory: "12Gi"
 
-  service:
-    type: ClusterIP
-    port: 1389
+#   service:
+#     type: ClusterIP
+#     port: 1389
 
-  persistence:
+#   persistence:
+#     enabled: true
+#     size: 80Gi
+
+#   env:
+#   SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
+#   SERVER_PROFILE_PATH: "pingdirectory"
+#   OPERATIONAL_MODE: "CLUSTERED"
+
+
+ping-devops:
+  global:
+    envs:
+      PING_IDENTITY_DEVOPS_USER: "akmal@likemindsconsulting.com"
+      PING_IDENTITY_DEVOPS_KEY: "6bf887b0-e52c-bef0-d55c-c08854495bee"
+      PING_IDENTITY_ACCEPT_EULA: "YES"
+    
+    license:
+      acceptEULA: true
+
+    services:
+      useLoadBalancerForDataService: true
+
+  # --- FIXED INDENTATION START ---
+  pingdirectory:
     enabled: true
-    size: 80Gi
 
-  env:
-  SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
-  SERVER_PROFILE_PATH: "pingdirectory"
-  OPERATIONAL_MODE: "CLUSTERED"
+    envs:
+      SERVER_PROFILE_PATH: "pingdirectory"
+      SERVER_PROFILE_BRANCH: "main"
+      REINDEX_TYPE: "none"
+      REIMPORT_DATA: "true"
+      ADDITIONAL_SETUP_ARGS: ""
+    
+    container:
+      replicaCount: 1
+      resources:
+        requests:
+          cpu: 500m
+          memory: 2Gi
+        limits:
+          cpu: 2
+          memory: 8Gi
+      envFrom:
+        - secretRef:
+            name: pf-git-secret
+
+    services:
+      # LDAP usually stays internal, but added LoadBalancer just in case
+      ldap:
+        servicePort: 389
+        containerPort: 1389
+        dataService: true
+      
+      ldaps:
+        type: LoadBalancer
+        servicePort: 636
+        containerPort: 1636
+        dataService: true
+        clusterService: true
+      
+      https:
+        type: LoadBalancer
+        servicePort: 443
+        containerPort: 1443
+        ingressPort: 443
+        dataService: true
+
+  pingdataconsole:
+    enabled: true
+    name: pingdataconsole
+    container:
+      resources:
+        requests:
+          cpu: 0
+          memory: 0.5Gi
+        limits:
+          cpu: 2
+          memory: 2Gi
+    services:
+      https:
+        type: LoadBalancer
+        containerPort: 8443
+        servicePort: 8443
+        dataService: true
+
+
 
