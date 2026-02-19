@@ -1,19 +1,30 @@
+# apiVersion: v2
+# name: ping-devops
+# description: Helm chart for deploying PingFederate and PingDirectory on GKE Autopilot
+# type: application
+# version: 0.1.0
+# appVersion: "12.0.0"
+
+# keywords:
+#   - pingidentity
+#   - pingfederate
+#   - pingdirectory
+#   - ciam
+#   - gke
+#   - autopilot
+
+# maintainers:
+#   - name: CIAM Team
+
+# dependencies: []
+
 apiVersion: v2
-name: ping-devops
-description: Helm chart for deploying PingFederate and PingDirectory on GKE Autopilot
+name: pingdirectory-gitops
+description: PingDirectory Deployment
 type: application
 version: 0.1.0
-appVersion: "12.0.0"
-
-keywords:
-  - pingidentity
-  - pingfederate
-  - pingdirectory
-  - ciam
-  - gke
-  - autopilot
-
-maintainers:
-  - name: CIAM Team
-
-dependencies: []
+appVersion: "9.3.0.0"
+dependencies:
+  - name: ping-devops        # MUST be ping-directory to generate Pods
+    version: "0.11.17"           # Stable version
+    repository: "https://helm.pingidentity.com"
