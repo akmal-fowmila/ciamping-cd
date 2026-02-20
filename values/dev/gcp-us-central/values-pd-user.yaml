@@ -30,45 +30,148 @@
 #   OPERATIONAL_MODE: "CLUSTERED"
 
 
+# ping-devops:
+#   global:
+#     envs:
+#       PING_IDENTITY_DEVOPS_USER: "akmal@likemindsconsulting.com"
+#       PING_IDENTITY_DEVOPS_KEY: "6bf887b0-e52c-bef0-d55c-c08854495bee"
+#       PING_IDENTITY_ACCEPT_EULA: "YES"
+    
+#     license:
+#       acceptEULA: true
+
+#     services:
+#       useLoadBalancerForDataService: true
+
+#   # --- FIXED INDENTATION START ---
+#   pingdirectory:
+#     enabled: true
+
+#     envs:
+#       SERVER_PROFILE_PATH: "pingdirectory"
+#       SERVER_PROFILE_BRANCH: "main"
+#       REINDEX_TYPE: "none"
+#       REIMPORT_DATA: "true"
+#       ADDITIONAL_SETUP_ARGS: ""
+    
+#     container:
+#       replicaCount: 1
+#       resources:
+#         requests:
+#           cpu: 500m
+#           memory: 2Gi
+#         limits:
+#           cpu: 2
+#           memory: 8Gi
+#       envFrom:
+#         - secretRef:
+#             name: pf-git-secret
+
+#     services:
+#       # LDAP usually stays internal, but added LoadBalancer just in case
+#       ldap:
+#         servicePort: 389
+#         containerPort: 1389
+#         dataService: true
+      
+#       ldaps:
+#         type: LoadBalancer
+#         servicePort: 636
+#         containerPort: 1636
+#         dataService: true
+#         clusterService: true
+      
+#       https:
+#         type: LoadBalancer
+#         servicePort: 443
+#         containerPort: 1443
+#         ingressPort: 443
+#         dataService: true
+
+#   pingdataconsole:
+#     enabled: true
+#     name: pingdataconsole
+#     container:
+#       resources:
+#         requests:
+#           cpu: 0
+#           memory: 0.5Gi
+#         limits:
+#           cpu: 2
+#           memory: 2Gi
+#     services:
+#       https:
+#         type: LoadBalancer
+#         containerPort: 8443
+#         servicePort: 8443
+#         dataService: true
+
+# CIAMPING-CD/values/dev/gcp-us-central/values-pd-user.yaml
+
 ping-devops:
   global:
     envs:
       PING_IDENTITY_DEVOPS_USER: "akmal@likemindsconsulting.com"
       PING_IDENTITY_DEVOPS_KEY: "6bf887b0-e52c-bef0-d55c-c08854495bee"
       PING_IDENTITY_ACCEPT_EULA: "YES"
-    
     license:
       acceptEULA: true
-
     services:
       useLoadBalancerForDataService: true
 
-  # --- FIXED INDENTATION START ---
   pingdirectory:
     enabled: true
-
+    
+    # --- MULTI-REGION SEED LOGIC START ---
     envs:
-      SERVER_PROFILE_PATH: "pingdirectory"
-      SERVER_PROFILE_BRANCH: "main"
+      # Designating this cluster as the Seed/Primary
+      K8S_SEED_HOSTNAME_SUFFIX: ".pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
+      K8S_POD_HOSTNAME_SUFFIX: ".pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
+      K8S_POD_HOSTNAME_PREFIX: "pingdirectory-"
+      
+      # Cluster Topology (Seed IDs)
+      K8S_CLUSTER: "us-central-gke"
+      K8S_SEED_CLUSTER: "us-central-gke"
+      K8S_CLUSTERS: "us-central-gke us-west-gke"
+      
+      # Server Profile Configuration
+      SERVER_PROFILE_PATH: "pingdirectory-user/pd.profile"
+      SERVER_PROFILE_BRANCH: "dev"
+      
+      # Migration/Sync flags
       REINDEX_TYPE: "none"
       REIMPORT_DATA: "true"
       ADDITIONAL_SETUP_ARGS: ""
-    
+    # --- MULTI-REGION SEED LOGIC END ---
+
     container:
-      replicaCount: 1
+      # Production Specs as per Design Doc
+      replicaCount: 3
       resources:
         requests:
           cpu: 500m
-          memory: 2Gi
+          memory: 4Gi
         limits:
-          cpu: 2
-          memory: 8Gi
+          cpu: 6
+          memory: 16Gi
       envFrom:
         - secretRef:
-            name: pf-git-secret
+            name: pf-git-secret # Secret for Git credentials
+
+    # --- STORAGE CONFIGURATION ---
+    volumeClaimTemplate:
+      storageClassName: "ping-directory-ssd" # Custom SSD StorageClass
+      resources:
+        requests:
+          storage: 80Gi
 
     services:
-      # LDAP usually stays internal, but added LoadBalancer just in case
+      # Cross-cluster discovery name MUST match ServiceExport name
+      clusterServiceName: pingdirectory-cluster-uscentral
+      
+      replication:
+        containerPort: 8989 # Replication protocol port
+      
       ldap:
         servicePort: 389
         containerPort: 1389
@@ -94,17 +197,18 @@ ping-devops:
     container:
       resources:
         requests:
-          cpu: 0
+          cpu: 128m
           memory: 0.5Gi
         limits:
-          cpu: 2
-          memory: 2Gi
+          cpu: 1
+          memory: 1Gi
     services:
       https:
         type: LoadBalancer
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
