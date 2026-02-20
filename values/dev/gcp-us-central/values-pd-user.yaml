@@ -134,12 +134,13 @@ ping-devops:
       K8S_SEED_CLUSTER: "us-central-gke"
       K8S_CLUSTERS: "us-central-gke us-west-gke"
       
-      # Server Profile Configuration
-      # SERVER_PROFILE_PATH: "pingdirectory-user/pd.profile"
-      # SERVER_PROFILE_BRANCH: "main"
+     # Server Profile Configuration
+      SERVER_PROFILE_BRANCH: "main"
+      SERVER_PROFILE_PATH: "pingdirectory/pd.profile/"
+      #SERVER_PROFILE_BRANCH: "main"
 
-     SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
-     SERVER_PROFILE_PATH: "pingdirectory/pd.profile/"
+     # SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
+     # SERVER_PROFILE_PATH: "pingdirectory/pd.profile/"
       
       # Migration/Sync flags
       REINDEX_TYPE: "none"
@@ -159,7 +160,7 @@ ping-devops:
           memory: 16Gi
       envFrom:
         - secretRef:
-            name: pf-git-secret # Secret for Git credentials
+            name: ping-server-profile-git-secret # Secret for Git credentials
 
     # --- STORAGE CONFIGURATION ---
     volumeClaimTemplate:
@@ -211,6 +212,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
