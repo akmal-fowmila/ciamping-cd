@@ -135,8 +135,11 @@ ping-devops:
       K8S_CLUSTERS: "us-central-gke us-west-gke"
       
       # Server Profile Configuration
-      SERVER_PROFILE_PATH: "pingdirectory-user/pd.profile"
-      SERVER_PROFILE_BRANCH: "main"
+      # SERVER_PROFILE_PATH: "pingdirectory-user/pd.profile"
+      # SERVER_PROFILE_BRANCH: "main"
+
+     SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
+     SERVER_PROFILE_PATH: "pingdirectory/pd.profile/"
       
       # Migration/Sync flags
       REINDEX_TYPE: "none"
@@ -208,6 +211,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
