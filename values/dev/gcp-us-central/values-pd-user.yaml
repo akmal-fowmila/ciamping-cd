@@ -136,7 +136,7 @@ ping-devops:
       
       # Server Profile Configuration
       SERVER_PROFILE_PATH: "pingdirectory-user/pd.profile"
-      SERVER_PROFILE_BRANCH: "dev"
+      SERVER_PROFILE_BRANCH: "main"
       
       # Migration/Sync flags
       REINDEX_TYPE: "none"
@@ -208,6 +208,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
