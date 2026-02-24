@@ -141,7 +141,7 @@ ping-devops:
 
       SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
       SERVER_PROFILE_PATH: "pingdirectory/pd.profile/"
-      
+      SERVER_PROFILE_BRANCH: "main"      
       # Migration/Sync flags
       REINDEX_TYPE: "none"
       REIMPORT_DATA: "true"
@@ -163,11 +163,11 @@ ping-devops:
             name: ping-server-profile-git-secret # Secret for Git credentials
 
     # --- STORAGE CONFIGURATION ---
-    # volumeClaimTemplate:
-    #   storageClassName: "ping-directory-ssd" # Custom SSD StorageClass
-    #   resources:
-    #     requests:
-    #       storage: 80Gi
+    volumeClaimTemplate:
+       storageClassName: "ping-directory-ssd" # Custom SSD StorageClass
+       resources:
+         requests:
+           storage: 80Gi
 
     services:
       # Cross-cluster discovery name MUST match ServiceExport name
@@ -212,6 +212,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
