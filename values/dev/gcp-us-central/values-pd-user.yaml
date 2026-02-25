@@ -122,6 +122,13 @@ ping-devops:
   pingdirectory:
     enabled: true
     
+    license:
+      secretName: ping-directory-license
+    # --- ADD THE IMAGE AND TAG HERE ---
+    image:
+      repository: pingidentity/pingdirectory
+      tag: 10.3.0.0-latest
+      
     # --- MULTI-REGION SEED LOGIC START ---
     envs:
       # Add these to map the secret keys to the container logic
@@ -216,6 +223,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
