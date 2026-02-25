@@ -35,9 +35,10 @@ name: ping-directory-wrapper
 description: Wrapper chart for TransUnion PingDirectory deployment
 type: application
 version: 0.1.0
-appVersion: "9.3.0.0"
+appVersion: "10.3.0.0"
 
 dependencies:
   - name: ping-devops        # This MUST match the top-level key in your values.yaml
     version: "0.11.17"       # Stable version per design docs
     repository: "https://helm.pingidentity.com"
+
