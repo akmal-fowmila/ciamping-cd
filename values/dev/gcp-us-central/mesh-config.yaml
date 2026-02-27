@@ -1,0 +1,13 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: pd-dns-proxy-config
+  namespace: istio-system
+spec:
+  revision: asm-managed
+  meshConfig:
+    defaultConfig:
+      proxyMetadata:
+        # This is the "glue" for cross-cluster DNS
+        ISTIO_META_DNS_CAPTURE: "true"
+        ISTIO_META_DNS_AUTO_ALLOCATE: "true"
