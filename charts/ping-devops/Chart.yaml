@@ -1,44 +1,10 @@
-# apiVersion: v2
-# name: ping-devops
-# description: Helm chart for deploying PingFederate and PingDirectory on GKE Autopilot
-# type: application
-# version: 0.1.0
-# appVersion: "12.0.0"
-
-# keywords:
-#   - pingidentity
-#   - pingfederate
-#   - pingdirectory
-#   - ciam
-#   - gke
-#   - autopilot
-
-# maintainers:
-#   - name: CIAM Team
-
-# dependencies: []
-
-# apiVersion: v2
-# name: pingdirectory-gitops
-# description: PingDirectory Deployment
-# type: application
-# version: 0.1.0
-# appVersion: "9.3.0.0"
-# dependencies:
-#   - name: ping-devops        # MUST be ping-directory to generate Pods
-#     version: "0.11.17"           # Stable version
-#     repository: "https://helm.pingidentity.com"
-
-# /charts/ping-devops/Chart.yaml
-apiVersion: v2
+﻿apiVersion: v2
 name: ping-directory-wrapper
-description: Wrapper chart for TransUnion PingDirectory deployment
+description: A Helm chart for PingDirectory
 type: application
-version: 0.1.0
-appVersion: "10.3.0.0"
-
+version: 1.0.0
+appVersion: "10.1.0"
 dependencies:
-  - name: ping-devops        # This MUST match the top-level key in your values.yaml
-    version: "0.11.17"       # Stable version per design docs
-    repository: "https://helm.pingidentity.com"
-
+  - name: ping-devops
+    version: 0.11.17
+    repository: https://helm.pingidentity.com/
