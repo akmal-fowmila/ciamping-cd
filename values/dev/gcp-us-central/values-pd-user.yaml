@@ -17,7 +17,7 @@ ping-devops:
     # --- ADD THE IMAGE AND TAG HERE ---
     image:
       repository: pingidentity/pingdirectory
-      tag: 10.3.0.0-latest
+      tag: 10.1.0.0-latest
       
     # --- MULTI-REGION SEED LOGIC START ---
     envs:
@@ -111,6 +111,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
