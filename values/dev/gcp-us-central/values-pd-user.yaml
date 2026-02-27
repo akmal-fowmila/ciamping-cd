@@ -132,8 +132,6 @@ ping-devops:
     # --- MULTI-REGION SEED LOGIC START ---
     envs:
       # Add these to map the secret keys to the container logic
-      # SERVER_PROFILE_AUTH_USER: "${userName}"
-      # SERVER_PROFILE_AUTH_PASSWORD: "${password}"
       
       # Designating this cluster as the Seed/Primary
       K8S_SEED_HOSTNAME_SUFFIX: ".pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
@@ -223,6 +221,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
