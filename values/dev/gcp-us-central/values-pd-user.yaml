@@ -16,7 +16,7 @@ ping-devops:
     #   secretName: ping-directory-license
     # --- ADD THE IMAGE AND TAG HERE ---
     image:
-      repository: pingidentity/pingdirectory
+      #repository: pingidentity/pingdirectory
       #tag: "latest" 
       tag: "2406" 
       #tag: edge
@@ -114,6 +114,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
