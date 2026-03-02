@@ -97,14 +97,18 @@ ping-devops:
         containerPort: 1636
         dataService: true
         clusterService: true
-      
+        annotations:
+          cloud.google.com/neg: '{"ingress": false}'
+          
       https:
         type: LoadBalancer
         servicePort: 443
         containerPort: 1443
         ingressPort: 443
         dataService: true
-
+        annotations:
+          cloud.google.com/neg: '{"ingress": false}'
+      
   pingdataconsole:
     enabled: true
     name: pingdataconsole
@@ -122,6 +126,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
