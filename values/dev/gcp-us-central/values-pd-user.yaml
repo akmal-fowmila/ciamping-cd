@@ -17,7 +17,8 @@ ping-devops:
     # --- ADD THE IMAGE AND TAG HERE ---
     image:
       repository: pingidentity/pingdirectory
-      tag: "latest" 
+      #tag: "latest" 
+      tag: "2406" 
       #tag: edge
       #tag: 10.1.0.0-latest
       
@@ -113,6 +114,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
