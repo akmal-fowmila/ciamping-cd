@@ -30,9 +30,13 @@ ping-devops:
       VERBOSE: "true"    # add this temporarily to get more debug output
       
       # Designating this cluster as the Seed/Primary
-      K8S_SEED_HOSTNAME_SUFFIX: ".pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
-      K8S_POD_HOSTNAME_SUFFIX: ".pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
-      K8S_POD_HOSTNAME_PREFIX: "pingdirectory-"
+      # K8S_SEED_HOSTNAME_SUFFIX: ".pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
+      # K8S_POD_HOSTNAME_SUFFIX: ".pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
+      # K8S_POD_HOSTNAME_PREFIX: "pingdirectory-"
+      K8S_POD_HOSTNAME_PREFIX: "gcp-uscentral-pd-pingdirectory-"
+      K8S_SEED_HOSTNAME_PREFIX: "gcp-uscentral-pd-pingdirectory-"
+      K8S_POD_HOSTNAME_SUFFIX: ".gcp-uscentral-pd-pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
+      K8S_SEED_HOSTNAME_SUFFIX: ".gcp-uscentral-pd-pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
       
       # Cluster Topology (Seed IDs)
       K8S_CLUSTER: "us-central-gke"
@@ -118,6 +122,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
