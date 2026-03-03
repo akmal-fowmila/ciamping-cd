@@ -137,6 +137,23 @@ ping-devops:
       acceptEULA: true
     services:
       useLoadBalancerForDataService: true
+    # workload:
+    #   statefulSet:
+    #     persistentvolume:
+    #       enabled: true
+    #       volumes:
+    #         out-dir:
+    #           mountPath: /opt/out
+    #           persistentVolumeClaim:
+    #             accessModes:
+    #               - ReadWriteOnce
+    #             storageClassName: "ping-directory-ssd"
+    #             resources:
+    #               requests:
+    #                 storage: 80Gi
+
+  pingdirectory:
+    enabled: true
     workload:
       statefulSet:
         persistentvolume:
@@ -150,10 +167,7 @@ ping-devops:
                 storageClassName: "ping-directory-ssd"
                 resources:
                   requests:
-                    storage: 80Gi
-
-  pingdirectory:
-    enabled: true
+                    storage: 80Gi  
     container:
       replicaCount: 2        # ← correct location per chart schema
       resources:
@@ -217,6 +231,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
