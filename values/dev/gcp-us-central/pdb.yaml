@@ -2,8 +2,10 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: pingdirectory-pdb
+  namespace: pd-dev-ns
 spec:
   maxUnavailable: 1
   selector:
     matchLabels:
-      app.kubernetes.io/instance: pingdirectory # Use appropriate label for your deployment
+      app.kubernetes.io/name: pingdirectory
+      app.kubernetes.io/instance: gcp-uscentral-pd
