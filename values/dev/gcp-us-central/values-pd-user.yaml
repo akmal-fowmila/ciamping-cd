@@ -1,3 +1,132 @@
+# ping-devops:
+#   global:
+#     envs:
+#       PING_IDENTITY_DEVOPS_USER: "akmal@likemindsconsulting.com"
+#       PING_IDENTITY_DEVOPS_KEY: "6bf887b0-e52c-bef0-d55c-c08854495bee"
+#       PING_IDENTITY_ACCEPT_EULA: "YES"
+#     license:
+#       acceptEULA: true
+#     services:
+#       useLoadBalancerForDataService: true
+
+#   pingdirectory:
+#     enabled: true
+#     replicaCount: 2
+#     # license:
+#     #   secretName: ping-directory-license
+#     # --- ADD THE IMAGE AND TAG HERE ---
+#     image:
+#       #repository: pingidentity/pingdirectory
+#       #tag: "latest" 
+#       tag: "2601" 
+#       #tag: edge
+#       #tag: 10.1.0.0-latest
+      
+#     # --- MULTI-REGION SEED LOGIC START ---
+#     envs:
+#       # Add these to map the secret keys to the container logic
+
+#       LEGACY_PROFILE_CHECK: "false"
+#       VERBOSE: "true"    # add this temporarily to get more debug output
+      
+#       # Designating this cluster as the Seed/Primary
+#       # K8S_SEED_HOSTNAME_SUFFIX: ".pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
+#       # K8S_POD_HOSTNAME_SUFFIX: ".pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
+#       # K8S_POD_HOSTNAME_PREFIX: "pingdirectory-"
+#       K8S_POD_HOSTNAME_PREFIX: "gcp-uscentral-pd-pingdirectory-"
+#       K8S_SEED_HOSTNAME_PREFIX: "gcp-uscentral-pd-pingdirectory-"
+#       K8S_POD_HOSTNAME_SUFFIX: ".gcp-uscentral-pd-pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
+#       K8S_SEED_HOSTNAME_SUFFIX: ".gcp-uscentral-pd-pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
+      
+#       # Cluster Topology (Seed IDs)
+#       K8S_CLUSTER: "us-central-gke"
+#       K8S_SEED_CLUSTER: "us-central-gke"
+#       K8S_CLUSTERS: "us-central-gke us-west-gke"
+      
+#      # Server Profile Configuration
+#       # SERVER_PROFILE_BRANCH: "main"
+#       # SERVER_PROFILE_PATH: "pingdirectory/pd.profile/"
+#       #SERVER_PROFILE_BRANCH: "main"
+
+#       SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
+#       SERVER_PROFILE_PATH: "pingdirectory/pd.profile/"
+#       #SERVER_PROFILE_PATH: "pingdirectory"
+#       SERVER_PROFILE_BRANCH: "main"      
+#       # Migration/Sync flags
+#       REINDEX_TYPE: "none"
+#       REIMPORT_DATA: "false"
+#       ADDITIONAL_SETUP_ARGS: ""
+#     # --- MULTI-REGION SEED LOGIC END ---
+
+#     container:
+#       # Production Specs as per Design Doc
+#       #replicaCount: 3
+#       resources:
+#         requests:
+#           cpu: 500m
+#           memory: 4Gi
+#         limits:
+#           cpu: 6
+#           memory: 16Gi
+#       envFrom:
+#         - secretRef:
+#             name: ping-server-profile-git-secret # Secret for Git credentials
+
+#     # --- STORAGE CONFIGURATION ---
+#     volumeClaimTemplate:
+#        storageClassName: "ping-directory-ssd" # Custom SSD StorageClass
+#        resources:
+#          requests:
+#            storage: 80Gi
+
+#     services:
+#       # Cross-cluster discovery name MUST match ServiceExport name
+#       clusterServiceName: pingdirectory-cluster-uscentral
+      
+#       replication:
+#         containerPort: 8989 # Replication protocol port
+      
+#       ldap:
+#         servicePort: 389
+#         containerPort: 1389
+#         dataService: true
+      
+#       ldaps:
+#         type: LoadBalancer
+#         servicePort: 636
+#         containerPort: 1636
+#         dataService: true
+#         clusterService: true
+#         annotations:
+#           cloud.google.com/neg: '{"ingress": false}'
+          
+#       https:
+#         type: LoadBalancer
+#         servicePort: 443
+#         containerPort: 1443
+#         ingressPort: 443
+#         dataService: true
+#         annotations:
+#           cloud.google.com/neg: '{"ingress": false}'
+      
+#   pingdataconsole:
+#     enabled: true
+#     name: pingdataconsole
+#     container:
+#       resources:
+#         requests:
+#           cpu: 128m
+#           memory: 0.5Gi
+#         limits:
+#           cpu: 1
+#           memory: 1Gi
+#     services:
+#       https:
+#         type: LoadBalancer
+#         containerPort: 8443
+#         servicePort: 8443
+#         dataService: true
+
 ping-devops:
   global:
     envs:
@@ -8,59 +137,25 @@ ping-devops:
       acceptEULA: true
     services:
       useLoadBalancerForDataService: true
+    workload:
+      statefulSet:
+        persistentvolume:
+          enabled: true
+          volumes:
+            out-dir:
+              mountPath: /opt/out
+              persistentVolumeClaim:
+                accessModes:
+                  - ReadWriteOnce
+                storageClassName: "ping-directory-ssd"
+                resources:
+                  requests:
+                    storage: 80Gi
 
   pingdirectory:
     enabled: true
-    replicaCount: 2
-    # license:
-    #   secretName: ping-directory-license
-    # --- ADD THE IMAGE AND TAG HERE ---
-    image:
-      #repository: pingidentity/pingdirectory
-      #tag: "latest" 
-      tag: "2601" 
-      #tag: edge
-      #tag: 10.1.0.0-latest
-      
-    # --- MULTI-REGION SEED LOGIC START ---
-    envs:
-      # Add these to map the secret keys to the container logic
-
-      LEGACY_PROFILE_CHECK: "false"
-      VERBOSE: "true"    # add this temporarily to get more debug output
-      
-      # Designating this cluster as the Seed/Primary
-      # K8S_SEED_HOSTNAME_SUFFIX: ".pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
-      # K8S_POD_HOSTNAME_SUFFIX: ".pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
-      # K8S_POD_HOSTNAME_PREFIX: "pingdirectory-"
-      K8S_POD_HOSTNAME_PREFIX: "gcp-uscentral-pd-pingdirectory-"
-      K8S_SEED_HOSTNAME_PREFIX: "gcp-uscentral-pd-pingdirectory-"
-      K8S_POD_HOSTNAME_SUFFIX: ".gcp-uscentral-pd-pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
-      K8S_SEED_HOSTNAME_SUFFIX: ".gcp-uscentral-pd-pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
-      
-      # Cluster Topology (Seed IDs)
-      K8S_CLUSTER: "us-central-gke"
-      K8S_SEED_CLUSTER: "us-central-gke"
-      K8S_CLUSTERS: "us-central-gke us-west-gke"
-      
-     # Server Profile Configuration
-      # SERVER_PROFILE_BRANCH: "main"
-      # SERVER_PROFILE_PATH: "pingdirectory/pd.profile/"
-      #SERVER_PROFILE_BRANCH: "main"
-
-      SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
-      SERVER_PROFILE_PATH: "pingdirectory/pd.profile/"
-      #SERVER_PROFILE_PATH: "pingdirectory"
-      SERVER_PROFILE_BRANCH: "main"      
-      # Migration/Sync flags
-      REINDEX_TYPE: "none"
-      REIMPORT_DATA: "false"
-      ADDITIONAL_SETUP_ARGS: ""
-    # --- MULTI-REGION SEED LOGIC END ---
-
     container:
-      # Production Specs as per Design Doc
-      #replicaCount: 3
+      replicaCount: 2        # ← correct location per chart schema
       resources:
         requests:
           cpu: 500m
@@ -70,48 +165,44 @@ ping-devops:
           memory: 16Gi
       envFrom:
         - secretRef:
-            name: ping-server-profile-git-secret # Secret for Git credentials
-
-    # --- STORAGE CONFIGURATION ---
-    volumeClaimTemplate:
-       storageClassName: "ping-directory-ssd" # Custom SSD StorageClass
-       resources:
-         requests:
-           storage: 80Gi
-
+            name: ping-server-profile-git-secret
+    envs:
+      LEGACY_PROFILE_CHECK: "false"
+      K8S_POD_HOSTNAME_PREFIX: "gcp-uscentral-pd-pingdirectory-"
+      K8S_SEED_HOSTNAME_PREFIX: "gcp-uscentral-pd-pingdirectory-"
+      K8S_POD_HOSTNAME_SUFFIX: ".gcp-uscentral-pd-pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
+      K8S_SEED_HOSTNAME_SUFFIX: ".gcp-uscentral-pd-pingdirectory-cluster-uscentral.pd-dev-ns.svc.cluster.local"
+      K8S_CLUSTER: "us-central-gke"
+      K8S_SEED_CLUSTER: "us-central-gke"
+      K8S_CLUSTERS: "us-central-gke us-west-gke"
+      SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
+      SERVER_PROFILE_PATH: "pingdirectory/pd.profile/"
+      SERVER_PROFILE_BRANCH: "main"
+      REINDEX_TYPE: "none"
+      REIMPORT_DATA: "false"
     services:
-      # Cross-cluster discovery name MUST match ServiceExport name
       clusterServiceName: pingdirectory-cluster-uscentral
-      
       replication:
-        containerPort: 8989 # Replication protocol port
-      
+        containerPort: 8989
       ldap:
         servicePort: 389
         containerPort: 1389
         dataService: true
-      
       ldaps:
         type: LoadBalancer
         servicePort: 636
         containerPort: 1636
         dataService: true
         clusterService: true
-        annotations:
-          cloud.google.com/neg: '{"ingress": false}'
-          
       https:
         type: LoadBalancer
         servicePort: 443
         containerPort: 1443
         ingressPort: 443
         dataService: true
-        annotations:
-          cloud.google.com/neg: '{"ingress": false}'
-      
+
   pingdataconsole:
     enabled: true
-    name: pingdataconsole
     container:
       resources:
         requests:
@@ -126,7 +217,6 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
-
 
 
 
