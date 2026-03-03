@@ -49,12 +49,12 @@ ping-devops:
       #SERVER_PROFILE_BRANCH: "main"
 
       SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
-      #SERVER_PROFILE_PATH: "pingdirectory/pd.profile/"
-      SERVER_PROFILE_PATH: "pingdirectory"
+      SERVER_PROFILE_PATH: "pingdirectory/pd.profile/"
+      #SERVER_PROFILE_PATH: "pingdirectory"
       SERVER_PROFILE_BRANCH: "main"      
       # Migration/Sync flags
       REINDEX_TYPE: "none"
-      REIMPORT_DATA: "true"
+      REIMPORT_DATA: "false"
       ADDITIONAL_SETUP_ARGS: ""
     # --- MULTI-REGION SEED LOGIC END ---
 
@@ -126,6 +126,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
