@@ -60,7 +60,7 @@ ping-devops:
 
     container:
       # Production Specs as per Design Doc
-   #   replicaCount: 3
+      #replicaCount: 3
       resources:
         requests:
           cpu: 500m
@@ -126,6 +126,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
