@@ -176,7 +176,7 @@ ping-devops:
       K8S_SEED_CLUSTER: "us-central-gke"
       K8S_CLUSTERS: "us-central-gke us-west-gke"
       SERVER_PROFILE_URL: "https://github.com/akmal-fowmila/ciam-ping-serverprofile.git"
-      SERVER_PROFILE_PATH: "pingdirectory/pd.profile/"
+      SERVER_PROFILE_PATH: "pingdirectory"
       SERVER_PROFILE_BRANCH: "main"
       REINDEX_TYPE: "none"
       REIMPORT_DATA: "false"
@@ -217,6 +217,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
