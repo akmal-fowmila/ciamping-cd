@@ -194,6 +194,9 @@ ping-devops:
       SERVER_PROFILE_BRANCH: "main"
       REINDEX_TYPE: "none"
       REIMPORT_DATA: "false"
+      ADMIN_USER_PASSWORD_FILE: "/opt/staging/pd.profile/.sec/admin-user-password"
+      ROOT_USER_PASSWORD_FILE: "/opt/staging/pd.profile/.sec/root-user-password"
+      ENCRYPTION_PASSWORD_FILE: "/opt/staging/pd.profile/.sec/encryption-password"
     services:
       clusterServiceName: pingdirectory-cluster-uscentral
       replication:
@@ -231,6 +234,7 @@ ping-devops:
         containerPort: 8443
         servicePort: 8443
         dataService: true
+
 
 
 
