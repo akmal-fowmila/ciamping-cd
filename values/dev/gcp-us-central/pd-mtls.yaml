@@ -6,3 +6,19 @@ metadata:
 spec:
   mtls:
     mode: STRICT  # Rejects all unencrypted traffic
+
+
+# apiVersion: security.istio.io/v1beta1
+# kind: PeerAuthentication
+# metadata:
+#   name: pingdataconsole-permissive
+#   namespace: pd-dev-ns
+# spec:
+#   selector:
+#     matchLabels:
+#       app.kubernetes.io/name: pingdataconsole
+#   mtls:
+#     mode: PERMISSIVE
+#   portLevelMtls:
+#     8443:
+#       mode: DISABLE
